@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>EcoSync | Admin Login</title>
+		<link rel="stylesheet" type="text/css" href="adminstyle.css" />
+		<script>
+			function handleLogin(event) {
+				event.preventDefault();
+
+				const formData = new FormData(
+					document.getElementById("admin-form")
+				);
+
+				fetch("/admin-login", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/x-www-form-urlencoded",
+					},
+					body: new URLSearchParams(formData),
+				})
+					.then((response) => response.text())
+					.then((result) => {
+						if (result.includes("Invalid")) {
+							alert(result);
+						} else {
+							window.location.href = "admin-panel.html"; // ✅ Redirect on success
+						}
+					})
+					.catch((error) => console.error("Error:", error));
+			}
+
+			// Make sure form submission calls handleLogin
+			document.addEventListener("DOMContentLoaded", () => {
+				document.getElementById("admin-form").onsubmit = handleLogin;
+			});
+		</script>
+	</head>
+	<body>
+		<form id="admin-form" onsubmit="handleLogin(event)">
+			<h2>Admin Login</h2>
+			<input
+				type="text"
+				name="username"
+				placeholder="Username"
+				required
+			/>
+			<input
+				type="password"
+				name="password"
+				placeholder="Password"
+				required
+			/>
+			<button type="submit">LOGIN</button>
+		</form>
+	</body>
+</html>
